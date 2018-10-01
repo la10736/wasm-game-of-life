@@ -2,4 +2,3 @@
 **/*.rs.bk
 Cargo.lock
 .idea
-/pkg/wasm_game_of_life_bg.wasm
