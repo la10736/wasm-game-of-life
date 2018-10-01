@@ -2,5 +2,4 @@
 **/*.rs.bk
 Cargo.lock
 .idea
-/www/node_modules
-/www/dist
+/pkg/wasm_game_of_life_bg.wasm
