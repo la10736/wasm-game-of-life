@@ -1,0 +1,17 @@
+Sep 29 18:17:00.423 ERRO Compilation of your program failed. stderr:
+
+   Compiling wasm-game-of-life v0.1.0 (file:///home/michele/learning/rust/wasm-game-of-life)
+error[E0463]: can't find crate for `itertools`
+ --> src/lib.rs:3:14
+  |
+3 | #[macro_use] extern crate itertools;
+  |              ^^^^^^^^^^^^^^^^^^^^^^^ can't find crate
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0463`.
+error: Could not compile `wasm-game-of-life`.
+
+To learn more, run the command again with --verbose.
+
+Sep 30 12:05:03.388 ERRO unexpected character found: `;` at line 16
