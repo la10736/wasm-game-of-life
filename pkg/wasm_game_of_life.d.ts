@@ -14,8 +14,6 @@ static  random(arg0: number, arg1: number): Universe;
 
  cells(): number;
 
- render(): string;
-
  tick(): void;
 
 }

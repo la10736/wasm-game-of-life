@@ -17,22 +17,40 @@ pub enum Cell {
 }
 
 #[wasm_bindgen]
+#[derive(Clone)]
 pub struct Universe {
     width: u32,
     height: u32,
-    cells: Vec<Cell>,
+    cells: Vec<u8>,
 }
 
 impl Universe {
-    fn get_index(&self, row: u32, column: u32) -> usize {
-        (row * self.width + column) as usize
+    fn get(&self, row: u32, column: u32) -> Cell {
+        let (pos, bit) = self.position(row, column);
+        match self.cells[pos] & 0x1 << bit {
+            0 => Cell::Dead,
+            _ => Cell::Alive
+        }
+    }
+
+    fn position(&self, row: u32, column: u32) -> (usize, usize) {
+        let index = (row * self.width + column) as usize;
+        ((index / 8), index % 8)
+    }
+
+    fn set(&mut self, row: u32, column: u32, cell: Cell) {
+        let (pos, bit) = self.position(row, column);
+        match cell {
+            Cell::Alive => { self.cells[pos] |= 0x1 << bit }
+            Cell::Dead => { self.cells[pos] &= !(0x1 << bit) }
+        }
     }
 
     fn live_neighbor_count(&self, row: u32, column: u32) -> u8 {
         iproduct!(-1..2, -1..2)
             .filter(|&pair| pair != (0, 0))
             .map(|(r, c)| (self.wrap_row((row as i32) + r), self.wrap_col((column as i32) + c)))
-            .filter(|&(r, c)| self.cells[self.get_index(r, c)] == Cell::Alive)
+            .filter(|&(r, c)| self.get(r, c) == Cell::Alive)
             .count() as u8
     }
 
@@ -48,37 +66,33 @@ impl Universe {
 #[wasm_bindgen]
 impl Universe {
     pub fn new(width: u32, height: u32) -> Self {
-        Self { width, height, cells: vec![Cell::Dead; (width * height) as usize] }
+        Self { width, height, cells: vec![0; ((width * height) / 8 + 1) as usize] }
     }
 
     pub fn example() -> Universe {
         let mut result = Self::new(64, 64);
 
-        result.cells = (0..result.width * result.height)
-            .map(|i| {
-                if i % 2 == 0 || i % 7 == 0 {
-                    Cell::Alive
-                } else {
-                    Cell::Dead
-                }
-            })
-            .collect();
-
+        iproduct!(0..result.width, 0..result.height).for_each(
+            |(r, c)| {
+                let i = r * result.width + c;
+                result.set(r, c,
+                           if i % 2 == 0 || i % 7 == 0 { Cell::Alive } else { Cell::Dead}
+                );
+            }
+        );
         result
     }
 
     pub fn random(width: u32, height: u32) -> Self {
         let mut result = Self::new(width, height);
 
-        result.cells = (0..result.width * result.height)
-            .map(|_| {
-                if js_sys::Math::random() < 0.5 {
-                    Cell::Alive
-                } else {
-                    Cell::Dead
-                }
-            })
-            .collect();
+        iproduct!(0..result.width, 0..result.height).for_each(
+            |(r, c)| {
+                result.set(r, c,
+                           if js_sys::Math::random() < 0.5 { Cell::Alive } else { Cell::Dead }
+                );
+            }
+        );
 
         result
     }
@@ -91,21 +105,18 @@ impl Universe {
         self.height
     }
 
-    pub fn cells(&self) -> *const Cell {
+    pub fn cells(&self) -> *const u8 {
         self.cells.as_ptr()
     }
 
-    pub fn render(&self) -> String {
-        self.to_string()
-    }
-
     pub fn tick(&mut self) {
-        self.cells = iproduct!(0..self.height, 0..self.width)
+        let uu = self.clone();
+        iproduct!(0..self.height, 0..self.width)
             .map(|(r, c)|
-                (self.get_index(r, c), self.live_neighbor_count(r, c))
+                (r, c, uu.get(r, c), uu.live_neighbor_count(r, c))
             )
-            .map(|(idx, count)|
-                match (self.cells[idx], count) {
+            .for_each(|(r, c, cell, count)|
+                self.set(r, c, match (cell, count) {
                     // Rule 1: Any live cell with fewer than two live neighbours
                     // dies, as if caused by underpopulation.
                     (Cell::Alive, x) if x < 2 => Cell::Dead,
@@ -121,24 +132,7 @@ impl Universe {
                     // All other cells remain in the same state.
                     (otherwise, _) => otherwise,
                 }
-            )
-            .collect();
-    }
-}
-
-use std::fmt;
-
-impl fmt::Display for Universe {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        for line in self.cells.as_slice().chunks(self.width as usize) {
-            for &cell in line {
-                let symbol = if cell == Cell::Dead { '◻' } else { '◼' };
-                write!(f, "{}", symbol)?;
-            }
-            write!(f, "\n")?;
-        }
-
-        Ok(())
+            ));
     }
 }
 
@@ -171,7 +165,7 @@ mod test {
     #[test]
     fn count_nighbor_should_ignore_self() {
         let mut u = Universe::new(3, 3);
-        u.cells = vec![Cell::Alive; u.cells.len()];
+        iproduct!(0..3, 0..3).for_each(|(r, c)| u.set(r, c, Cell::Alive));
         assert_eq!(8, u.live_neighbor_count(0, 0));
     }
 }
