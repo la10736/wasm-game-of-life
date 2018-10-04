@@ -80,3 +80,139 @@ error: Could not compile `wasm-game-of-life`.
 
 To learn more, run the command again with --verbose.
 
+Oct 04 22:10:31.517 ERRO Compilation of your program failed. stderr:
+
+   Compiling serde_derive v1.0.79
+   Compiling wasm-bindgen-shared v0.2.23
+   Compiling wasm-bindgen-backend v0.2.23
+   Compiling wasm-bindgen-macro-support v0.2.23
+   Compiling wasm-bindgen-macro v0.2.23
+   Compiling wasm-bindgen v0.2.23
+   Compiling js-sys v0.3.0
+   Compiling wasm-game-of-life v0.1.0 (file:///home/michele/learning/rust/wasm-game-of-life)
+error: cannot find macro `log!` in this scope
+  |
+  = help: have you added the `#[macro_use]` on the module/import?
+
+error: aborting due to previous error
+
+error: Could not compile `wasm-game-of-life`.
+
+To learn more, run the command again with --verbose.
+
+Oct 04 22:11:04.633 ERRO Compilation of your program failed. stderr:
+
+   Compiling wasm-game-of-life v0.1.0 (file:///home/michele/learning/rust/wasm-game-of-life)
+error[E0425]: cannot find value `row` in this scope
+
+error[E0425]: cannot find value `col` in this scope
+
+error[E0425]: cannot find value `live_neighbors` in this scope
+
+error: aborting due to 3 previous errors
+
+For more information about this error, try `rustc --explain E0425`.
+error: Could not compile `wasm-game-of-life`.
+
+To learn more, run the command again with --verbose.
+
+Oct 04 22:39:23.900 ERRO Compilation of your program failed. stderr:
+
+   Compiling wasm-game-of-life v0.1.0 (file:///home/michele/learning/rust/wasm-game-of-life)
+error[E0433]: failed to resolve. Use of undeclared type or module `Cells`
+
+warning: unused macro definition
+  --> src/lib.rs:28:1
+   |
+28 | / macro_rules! log {
+29 | |     ($($t:tt)*) => (log(&format!($($t)*)))
+30 | | }
+   | |_^
+   |
+   = note: #[warn(unused_macros)] on by default
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0433`.
+error: Could not compile `wasm-game-of-life`.
+
+To learn more, run the command again with --verbose.
+
+Oct 04 22:40:06.906 ERRO Compilation of your program failed. stderr:
+
+   Compiling wasm-game-of-life v0.1.0 (file:///home/michele/learning/rust/wasm-game-of-life)
+error: expected one of `)`, `,`, `.`, `?`, or an operator, found `;`
+   --> src/lib.rs:150:10
+    |
+150 |         };
+    |          ^ expected one of `)`, `,`, `.`, `?`, or an operator here
+
+error: expected expression, found `)`
+   --> src/lib.rs:151:9
+    |
+151 |         )
+    |         ^ expected expression
+
+error[E0433]: failed to resolve. Use of undeclared type or module `Cells`
+
+warning: unused macro definition
+  --> src/lib.rs:28:1
+   |
+28 | / macro_rules! log {
+29 | |     ($($t:tt)*) => (log(&format!($($t)*)))
+30 | | }
+   | |_^
+   |
+   = note: #[warn(unused_macros)] on by default
+
+error: aborting due to 3 previous errors
+
+For more information about this error, try `rustc --explain E0433`.
+error: Could not compile `wasm-game-of-life`.
+
+To learn more, run the command again with --verbose.
+
+Oct 04 22:40:21.446 ERRO Compilation of your program failed. stderr:
+
+   Compiling wasm-game-of-life v0.1.0 (file:///home/michele/learning/rust/wasm-game-of-life)
+error[E0433]: failed to resolve. Use of undeclared type or module `Cells`
+
+warning: unused macro definition
+  --> src/lib.rs:28:1
+   |
+28 | / macro_rules! log {
+29 | |     ($($t:tt)*) => (log(&format!($($t)*)))
+30 | | }
+   | |_^
+   |
+   = note: #[warn(unused_macros)] on by default
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0433`.
+error: Could not compile `wasm-game-of-life`.
+
+To learn more, run the command again with --verbose.
+
+Oct 04 22:41:25.975 ERRO Compilation of your program failed. stderr:
+
+   Compiling wasm-game-of-life v0.1.0 (file:///home/michele/learning/rust/wasm-game-of-life)
+error[E0433]: failed to resolve. Use of undeclared type or module `Cells`
+
+warning: unused macro definition
+  --> src/lib.rs:28:1
+   |
+28 | / macro_rules! log {
+29 | |     ($($t:tt)*) => (log(&format!($($t)*)))
+30 | | }
+   | |_^
+   |
+   = note: #[warn(unused_macros)] on by default
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0433`.
+error: Could not compile `wasm-game-of-life`.
+
+To learn more, run the command again with --verbose.
+

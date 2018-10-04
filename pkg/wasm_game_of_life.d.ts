@@ -16,4 +16,6 @@ static  random(arg0: number, arg1: number): Universe;
 
  tick(): void;
 
+ toogle_cell(arg0: number, arg1: number): void;
+
 }

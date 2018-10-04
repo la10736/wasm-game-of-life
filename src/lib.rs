@@ -16,12 +16,26 @@ pub enum Cell {
     Alive = 1,
 }
 
+impl Cell {
+    fn toogle(self) -> Self {
+        match self {
+            Cell::Dead => Cell::Alive,
+            Cell::Alive => Cell::Dead
+        }
+    }
+}
+
 #[wasm_bindgen]
 #[derive(Clone)]
 pub struct Universe {
     width: u32,
     height: u32,
     cells: Vec<u8>,
+}
+
+// A macro to provide `println!(..)`-style syntax for `console.log` logging.
+#[allow(unused_macros)] macro_rules! log {
+    ($($t:tt)*) => (log(&format!($($t)*)))
 }
 
 impl Universe {
@@ -66,6 +80,7 @@ impl Universe {
 #[wasm_bindgen]
 impl Universe {
     pub fn new(width: u32, height: u32) -> Self {
+        utils::set_panic_hook();
         Self { width, height, cells: vec![0; ((width * height) / 8 + 1) as usize] }
     }
 
@@ -76,7 +91,7 @@ impl Universe {
             |(r, c)| {
                 let i = r * result.width + c;
                 result.set(r, c,
-                           if i % 2 == 0 || i % 7 == 0 { Cell::Alive } else { Cell::Dead}
+                           if i % 2 == 0 || i % 7 == 0 { Cell::Alive } else { Cell::Dead },
                 );
             }
         );
@@ -89,7 +104,7 @@ impl Universe {
         iproduct!(0..result.width, 0..result.height).for_each(
             |(r, c)| {
                 result.set(r, c,
-                           if js_sys::Math::random() < 0.5 { Cell::Alive } else { Cell::Dead }
+                           if js_sys::Math::random() < 0.5 { Cell::Alive } else { Cell::Dead },
                 );
             }
         );
@@ -116,23 +131,30 @@ impl Universe {
                 (r, c, uu.get(r, c), uu.live_neighbor_count(r, c))
             )
             .for_each(|(r, c, cell, count)|
-                self.set(r, c, match (cell, count) {
-                    // Rule 1: Any live cell with fewer than two live neighbours
-                    // dies, as if caused by underpopulation.
-                    (Cell::Alive, x) if x < 2 => Cell::Dead,
-                    // Rule 2: Any live cell with two or three live neighbours
-                    // lives on to the next generation.
-                    (Cell::Alive, 2) | (Cell::Alive, 3) => Cell::Alive,
-                    // Rule 3: Any live cell with more than three live
-                    // neighbours dies, as if by overpopulation.
-                    (Cell::Alive, x) if x > 3 => Cell::Dead,
-                    // Rule 4: Any dead cell with exactly three live neighbours
-                    // becomes a live cell, as if by reproduction.
-                    (Cell::Dead, 3) => Cell::Alive,
-                    // All other cells remain in the same state.
-                    (otherwise, _) => otherwise,
-                }
-            ));
+                {
+                    let next_cell = match (cell, count) {
+                        // Rule 1: Any live cell with fewer than two live neighbours
+                        // dies, as if caused by underpopulation.
+                        (Cell::Alive, x) if x < 2 => Cell::Dead,
+                        // Rule 2: Any live cell with two or three live neighbours
+                        // lives on to the next generation.
+                        (Cell::Alive, 2) | (Cell::Alive, 3) => Cell::Alive,
+                        // Rule 3: Any live cell with more than three live
+                        // neighbours dies, as if by overpopulation.
+                        (Cell::Alive, x) if x > 3 => Cell::Dead,
+                        // Rule 4: Any dead cell with exactly three live neighbours
+                        // becomes a live cell, as if by reproduction.
+                        (Cell::Dead, 3) => Cell::Alive,
+                        // All other cells remain in the same state.
+                        (otherwise, _) => otherwise,
+                    };
+                    self.set(r, c, next_cell)
+                });
+    }
+
+    pub fn toogle_cell(&mut self, row: u32, col: u32) {
+        let new = self.get(row, col).toogle();
+        self.set(row, col, new)
     }
 }
 
@@ -142,6 +164,12 @@ fn wrap(mut v: i32, size: u32) -> u32 {
         v += size;
     }
     (v % size) as u32
+}
+
+#[wasm_bindgen]
+extern {
+    #[wasm_bindgen(js_namespace = console)]
+    fn log(msg: &str);
 }
 
 #[cfg(test)]

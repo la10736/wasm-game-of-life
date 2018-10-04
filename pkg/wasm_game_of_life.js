@@ -79,6 +79,14 @@ export class Universe {
     tick() {
         return wasm.universe_tick(this.ptr);
     }
+    /**
+    * @param {number} arg0
+    * @param {number} arg1
+    * @returns {void}
+    */
+    toogle_cell(arg0, arg1) {
+        return wasm.universe_toogle_cell(this.ptr, arg0, arg1);
+    }
 }
 
 let cachedDecoder = new TextDecoder('utf-8');
