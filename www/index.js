@@ -7,7 +7,7 @@ const DEAD_COLOR = "#FFFFFF";
 const ALIVE_COLOR = "#000000";
 
 // Construct the universe, and get its width and height.
-const universe = Universe.random(128, 128);
+const universe = Universe.example();
 const width = universe.width();
 const height = universe.height();
 
@@ -20,16 +20,31 @@ canvas.width = (CELL_SIZE + 1) * width + 1;
 const ctx = canvas.getContext('2d');
 
 const playPauseButton = document.getElementById("play-pause");
+const randomButton = document.getElementById("random");
+const clearButton = document.getElementById("clear");
+const ticksSlider = document.getElementById("ticks");
+const ticksLabel = document.getElementById("ticks_label");
+const label_base = ticksLabel.textContent
+let ticks = ticksSlider.value;
 
 let animationId = null;
 
+const updateTicks = () => {
+    ticks = ticksSlider.value;
+    ticksLabel.textContent = label_base + ticks
+}
+
 const renderLoop = () => {
-  universe.tick();
+    updateTicks()
 
-  drawGrid();
-  drawCells();
+    for (let i=0; i<ticks; i++) {
+        universe.tick();
+    };
 
-  animationId = requestAnimationFrame(renderLoop);
+    drawGrid();
+    drawCells();
+
+    animationId = requestAnimationFrame(renderLoop);
 };
 
 const isPaused = () => {
@@ -105,6 +120,18 @@ const drawCells = () => {
   ctx.stroke();
 };
 
+const toggle = (row, col) => {
+    universe.toggle_cell(row, col);
+}
+
+const set = (row, col) => {
+    universe.set_cell(row % height, col % width);
+}
+
+const clear = (row, col) => {
+    universe.clear_cell(row % height, col % width);
+}
+
 canvas.addEventListener("click", event => {
     const boundingRect = canvas.getBoundingClientRect();
 
@@ -117,9 +144,33 @@ canvas.addEventListener("click", event => {
     const row = Math.min(Math.floor(canvasTop / (CELL_SIZE + 1)), height - 1);
     const col = Math.min(Math.floor(canvasLeft / (CELL_SIZE + 1)), width - 1);
 
-    universe.toogle_cell(row, col);
+    if (event.ctrlKey && event.shiftKey) {
+        set(row-1, col);
+        set(row, col);
+        set(row+1, col);
+    } else if (event.ctrlKey) {
+        set(row-1, col+1);
+        set(row, col+1);
+        set(row+1, col+1);
+        set(row+1, col);
+        set(row, col-1);
+    } else if (event.altKey && event.shiftKey) {
+        clear(row, col);
+    } else if (event.shiftKey) {
+        set(row, col);
+    } else {
+        toggle(row, col);
+    }
 
     drawCells();
+});
+
+randomButton.addEventListener("click", event => {
+    universe.random();
+});
+
+clearButton.addEventListener("click", event => {
+    universe.clear();
 });
 
 play();

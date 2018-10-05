@@ -216,3 +216,15 @@ error: Could not compile `wasm-game-of-life`.
 
 To learn more, run the command again with --verbose.
 
+Oct 05 13:09:29.919 ERRO Compilation of your program failed. stderr:
+
+   Compiling wasm-game-of-life v0.1.0 (/home/mdamico/learning/rust/wasm-game-of-life)
+error[E0425]: cannot find value `result` in this scope
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0425`.
+error: Could not compile `wasm-game-of-life`.
+
+To learn more, run the command again with --verbose.
+

@@ -17,7 +17,7 @@ pub enum Cell {
 }
 
 impl Cell {
-    fn toogle(self) -> Self {
+    fn toggle(self) -> Self {
         match self {
             Cell::Dead => Cell::Alive,
             Cell::Alive => Cell::Dead
@@ -98,16 +98,23 @@ impl Universe {
         result
     }
 
-    pub fn random(width: u32, height: u32) -> Self {
-        let mut result = Self::new(width, height);
-
-        iproduct!(0..result.width, 0..result.height).for_each(
+    pub fn random(&mut self) {
+        iproduct!(0..self.width, 0..self.height).for_each(
             |(r, c)| {
-                result.set(r, c,
+                self.set(r, c,
                            if js_sys::Math::random() < 0.5 { Cell::Alive } else { Cell::Dead },
                 );
             }
         );
+    }
+
+    pub fn clear(&mut self) {
+        self.cells = vec![0; self.cells.len()];
+    }
+
+    pub fn new_random(width: u32, height: u32) -> Self {
+        let mut result = Self::new(width, height);
+        result.random();
 
         result
     }
@@ -122,6 +129,19 @@ impl Universe {
 
     pub fn cells(&self) -> *const u8 {
         self.cells.as_ptr()
+    }
+
+    pub fn toggle_cell(&mut self, row: u32, col: u32) {
+        let new = self.get(row, col).toggle();
+        self.set(row, col, new)
+    }
+
+    pub fn set_cell(&mut self, row: u32, col: u32) {
+        self.set(row, col, Cell::Alive)
+    }
+
+    pub fn clear_cell(&mut self, row: u32, col: u32) {
+        self.set(row, col, Cell::Dead)
     }
 
     pub fn tick(&mut self) {
@@ -150,11 +170,6 @@ impl Universe {
                     };
                     self.set(r, c, next_cell)
                 });
-    }
-
-    pub fn toogle_cell(&mut self, row: u32, col: u32) {
-        let new = self.get(row, col).toogle();
-        self.set(row, col, new)
     }
 }
 

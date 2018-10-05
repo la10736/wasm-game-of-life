@@ -6,7 +6,11 @@ static  new(arg0: number, arg1: number): Universe;
 
 static  example(): Universe;
 
-static  random(arg0: number, arg1: number): Universe;
+ random(): void;
+
+ clear(): void;
+
+static  new_random(arg0: number, arg1: number): Universe;
 
  width(): number;
 
@@ -14,8 +18,12 @@ static  random(arg0: number, arg1: number): Universe;
 
  cells(): number;
 
- tick(): void;
+ toggle_cell(arg0: number, arg1: number): void;
 
- toogle_cell(arg0: number, arg1: number): void;
+ set_cell(arg0: number, arg1: number): void;
+
+ clear_cell(arg0: number, arg1: number): void;
+
+ tick(): void;
 
 }

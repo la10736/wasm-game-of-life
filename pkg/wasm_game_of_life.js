@@ -48,12 +48,24 @@ export class Universe {
         return Universe.__wrap(wasm.universe_example());
     }
     /**
+    * @returns {void}
+    */
+    random() {
+        return wasm.universe_random(this.ptr);
+    }
+    /**
+    * @returns {void}
+    */
+    clear() {
+        return wasm.universe_clear(this.ptr);
+    }
+    /**
     * @param {number} arg0
     * @param {number} arg1
     * @returns {Universe}
     */
-    static random(arg0, arg1) {
-        return Universe.__wrap(wasm.universe_random(arg0, arg1));
+    static new_random(arg0, arg1) {
+        return Universe.__wrap(wasm.universe_new_random(arg0, arg1));
     }
     /**
     * @returns {number}
@@ -74,18 +86,34 @@ export class Universe {
         return wasm.universe_cells(this.ptr);
     }
     /**
+    * @param {number} arg0
+    * @param {number} arg1
     * @returns {void}
     */
-    tick() {
-        return wasm.universe_tick(this.ptr);
+    toggle_cell(arg0, arg1) {
+        return wasm.universe_toggle_cell(this.ptr, arg0, arg1);
     }
     /**
     * @param {number} arg0
     * @param {number} arg1
     * @returns {void}
     */
-    toogle_cell(arg0, arg1) {
-        return wasm.universe_toogle_cell(this.ptr, arg0, arg1);
+    set_cell(arg0, arg1) {
+        return wasm.universe_set_cell(this.ptr, arg0, arg1);
+    }
+    /**
+    * @param {number} arg0
+    * @param {number} arg1
+    * @returns {void}
+    */
+    clear_cell(arg0, arg1) {
+        return wasm.universe_clear_cell(this.ptr, arg0, arg1);
+    }
+    /**
+    * @returns {void}
+    */
+    tick() {
+        return wasm.universe_tick(this.ptr);
     }
 }
 
