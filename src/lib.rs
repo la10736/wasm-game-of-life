@@ -185,6 +185,9 @@ fn wrap(mut v: i32, size: u32) -> u32 {
 extern {
     #[wasm_bindgen(js_namespace = console)]
     fn log(msg: &str);
+
+    #[wasm_bindgen(js_namespace = performance)]
+    fn now() -> f64;
 }
 
 #[cfg(test)]

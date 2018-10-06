@@ -12,7 +12,10 @@
           align-items: center;
           justify-content: center;
         }
-
+        #fps {
+          white-space: pre;
+          font-family: monospace;
+        }
     </style>
     <head>
         <meta charset="utf-8">
@@ -21,6 +24,7 @@
     <body>
         <button id="clear">Clear</button>
         <button id="random">Random</button>
+        <div id="fps"></div>
         <canvas id="game-of-life-canvas"></canvas>
         <button id="play-pause"></button>
         <label id="ticks_label" for="ticks">Ticks per Frame = </label>

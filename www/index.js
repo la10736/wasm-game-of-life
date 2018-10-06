@@ -7,7 +7,7 @@ const DEAD_COLOR = "#FFFFFF";
 const ALIVE_COLOR = "#000000";
 
 // Construct the universe, and get its width and height.
-const universe = Universe.example();
+const universe = Universe.new_random(128, 128);
 const width = universe.width();
 const height = universe.height();
 
@@ -18,6 +18,8 @@ canvas.height = (CELL_SIZE + 1) * height + 1;
 canvas.width = (CELL_SIZE + 1) * width + 1;
 
 const ctx = canvas.getContext('2d');
+
+const imgData = new ImageData(width, height);
 
 const playPauseButton = document.getElementById("play-pause");
 const randomButton = document.getElementById("random");
@@ -36,15 +38,21 @@ const updateTicks = () => {
 
 const renderLoop = () => {
     updateTicks()
-
     for (let i=0; i<ticks; i++) {
         universe.tick();
     };
 
-    drawGrid();
+    fps.render()
+
     drawCells();
+    drawGrid();
 
     animationId = requestAnimationFrame(renderLoop);
+};
+
+const draw = () => {
+    drawCells();
+    drawGrid();
 };
 
 const isPaused = () => {
@@ -94,30 +102,74 @@ const drawGrid = () => {
 };
 
 const drawCells = () => {
-  const cellsPtr = universe.cells();
-  const cells = new Uint8Array(memory.buffer, cellsPtr, (width * height / 8 ) + 1);
+    const cellsPtr = universe.cells();
+    const cells = new Uint8Array(memory.buffer, cellsPtr, (width * height / 8 ) + 1);
 
-  ctx.beginPath();
+    ctx.beginPath();
 
-  for (let row = 0; row < height; row++) {
-    for (let col = 0; col < width; col++) {
-      const idx = getIndex(row, col);
-      let p = Math.floor(idx/8);
+    ctx.fillStyle = DEAD_COLOR
 
-      ctx.fillStyle = (cells[p] & (0x1 << (idx % 8))) === 0
-        ? DEAD_COLOR
-        : ALIVE_COLOR;
+    for (let row = 0; row < height; row++) {
+        for (let col = 0; col < width; col++) {
+            const idx = getIndex(row, col);
+            let p = Math.floor(idx/8);
+            let val = (cells[p] & (0x1 << (idx % 8)))
 
-      ctx.fillRect(
-        col * (CELL_SIZE + 1) + 1,
-        row * (CELL_SIZE + 1) + 1,
-        CELL_SIZE,
-        CELL_SIZE
-      );
+            let level = val === 0 ? 255 : 0;
+
+            let pos = ((row * width) + col) * 4;
+            imgData.data[pos] = level;
+            imgData.data[pos+1] = level;
+            imgData.data[pos+2] = level;
+            imgData.data[pos+3] = 255;
+        }
     }
+    ctx.imageSmoothingEnabled = false;
+    ctx.putImageData(imgData,0,0);
+    ctx.drawImage(canvas, 0, 0, (CELL_SIZE + 1) * canvas.width, (CELL_SIZE + 1) * canvas.height);
+};
+
+const fps = new class {
+  constructor() {
+    this.fps = document.getElementById("fps");
+    this.frames = [];
+    this.lastFrameTimeStamp = performance.now();
   }
 
-  ctx.stroke();
+  render() {
+    // Convert the delta time since the last frame render into a measure
+    // of frames per second.
+    const now = performance.now();
+    const delta = now - this.lastFrameTimeStamp;
+    this.lastFrameTimeStamp = now;
+    const fps = 1 / delta * 1000;
+
+    // Save only the latest 100 timings.
+    this.frames.push(fps);
+    if (this.frames.length > 100) {
+      this.frames.shift();
+    }
+
+    // Find the max, min, and mean of our 100 latest timings.
+    let min = Infinity;
+    let max = -Infinity;
+    let sum = 0;
+    for (let i = 0; i < this.frames.length; i++) {
+      sum += this.frames[i];
+      min = Math.min(this.frames[i], min);
+      max = Math.max(this.frames[i], max);
+    }
+    let mean = sum / this.frames.length;
+
+    // Render the statistics.
+    this.fps.textContent = `
+Frames per Second:
+         latest = ${Math.round(fps)}
+avg of last 100 = ${Math.round(mean)}
+min of last 100 = ${Math.round(min)}
+max of last 100 = ${Math.round(max)}
+`.trim();
+  }
 };
 
 const toggle = (row, col) => {
@@ -162,15 +214,17 @@ canvas.addEventListener("click", event => {
         toggle(row, col);
     }
 
-    drawCells();
+    draw();
 });
 
 randomButton.addEventListener("click", event => {
     universe.random();
+    draw();
 });
 
 clearButton.addEventListener("click", event => {
     universe.clear();
+    draw();
 });
 
 play();
