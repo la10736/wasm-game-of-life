@@ -5,6 +5,34 @@ import * as wasm from './wasm_game_of_life_bg';
 */
 export const Cell = Object.freeze({ Dead:0,Alive:1, });
 
+const __wbg_time_96506d9a603f1ede_target = console.time;
+
+let cachedDecoder = new TextDecoder('utf-8');
+
+let cachegetUint8Memory = null;
+function getUint8Memory() {
+    if (cachegetUint8Memory === null || cachegetUint8Memory.buffer !== wasm.memory.buffer) {
+        cachegetUint8Memory = new Uint8Array(wasm.memory.buffer);
+    }
+    return cachegetUint8Memory;
+}
+
+function getStringFromWasm(ptr, len) {
+    return cachedDecoder.decode(getUint8Memory().subarray(ptr, ptr + len));
+}
+
+export function __wbg_time_96506d9a603f1ede(arg0, arg1) {
+    let varg0 = getStringFromWasm(arg0, arg1);
+    __wbg_time_96506d9a603f1ede_target(varg0);
+}
+
+const __wbg_timeEnd_4c80ca1a031be605_target = console.timeEnd;
+
+export function __wbg_timeEnd_4c80ca1a031be605(arg0, arg1) {
+    let varg0 = getStringFromWasm(arg0, arg1);
+    __wbg_timeEnd_4c80ca1a031be605_target(varg0);
+}
+
 const __wbg_random_083ad9047bc62741_target = Math.random.bind(Math) || function() {
     throw new Error(`wasm-bindgen: Math.random.bind(Math) does not exist`);
 };
@@ -115,20 +143,6 @@ export class Universe {
     tick() {
         return wasm.universe_tick(this.ptr);
     }
-}
-
-let cachedDecoder = new TextDecoder('utf-8');
-
-let cachegetUint8Memory = null;
-function getUint8Memory() {
-    if (cachegetUint8Memory === null || cachegetUint8Memory.buffer !== wasm.memory.buffer) {
-        cachegetUint8Memory = new Uint8Array(wasm.memory.buffer);
-    }
-    return cachegetUint8Memory;
-}
-
-function getStringFromWasm(ptr, len) {
-    return cachedDecoder.decode(getUint8Memory().subarray(ptr, ptr + len));
 }
 
 export function __wbindgen_throw(ptr, len) {

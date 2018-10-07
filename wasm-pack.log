@@ -228,3 +228,204 @@ error: Could not compile `wasm-game-of-life`.
 
 To learn more, run the command again with --verbose.
 
+Oct 06 16:17:18.380 ERRO Compilation of your program failed. stderr:
+
+   Compiling wasm-game-of-life v0.1.0 (file:///home/michele/learning/rust/wasm-game-of-life)
+error: expected identifier, found keyword `pub`
+   --> src/lib.rs:199:12
+    |
+199 |     pub fn pub fn new(name: &'a str) -> Self {
+    |            ^^^ expected identifier, found keyword
+
+error: expected one of `(` or `<`, found `fn`
+   --> src/lib.rs:199:16
+    |
+199 |     pub fn pub fn new(name: &'a str) -> Self {
+    |                ^^ expected one of `(` or `<` here
+
+error[E0599]: no function or associated item named `new` found for type `Timer<'_>` in the current scope
+
+error: aborting due to 3 previous errors
+
+For more information about this error, try `rustc --explain E0599`.
+error: Could not compile `wasm-game-of-life`.
+
+To learn more, run the command again with --verbose.
+
+Oct 07 22:03:54.858 ERRO Compilation of your program failed. stderr:
+
+   Compiling wasm-game-of-life v0.1.0 (file:///home/michele/learning/rust/wasm-game-of-life)
+error[E0308]: mismatched types
+   --> src/lib.rs:186:30
+    |
+186 |     js_sys::Math::random() < level
+    |                              ^^^^^ expected f64, found f32
+help: you can cast an `f32` to `f64` in a lossless way
+    |
+186 |     js_sys::Math::random() < level.into()
+    |                              ^^^^^^^^^^^^
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0308`.
+error: Could not compile `wasm-game-of-life`.
+
+To learn more, run the command again with --verbose.
+
+Oct 07 22:07:34.103 ERRO Compilation of your program failed. stderr:
+
+   Compiling wasm-game-of-life v0.1.0 (file:///home/michele/learning/rust/wasm-game-of-life)
+error: expected identifier, found `!`
+   --> src/lib.rs:190:7
+    |
+190 |     #[!cfg(target_arch = "wasm32")] {
+    |       ^ expected identifier
+
+error: aborting due to previous error
+
+error: Could not compile `wasm-game-of-life`.
+
+To learn more, run the command again with --verbose.
+
+Oct 07 22:10:20.425 ERRO Compilation of your program failed. stderr:
+
+   Compiling wasm-game-of-life v0.1.0 (file:///home/michele/learning/rust/wasm-game-of-life)
+error: cannot find macro `cfg_if!` in this scope
+   --> src/lib.rs:187:5
+    |
+187 |     cfg_if! {
+    |     ^^^^^^
+
+error: aborting due to previous error
+
+error: Could not compile `wasm-game-of-life`.
+
+To learn more, run the command again with --verbose.
+
+Oct 07 22:10:46.113 ERRO Compilation of your program failed. stderr:
+
+   Compiling wasm-game-of-life v0.1.0 (file:///home/michele/learning/rust/wasm-game-of-life)
+error: expected one of `!` or `::`, found `(`
+   --> src/lib.rs:190:33
+    |
+190 |             js_sys::Math::random() < level
+    |                                 ^ expected one of `!` or `::` here
+
+error: aborting due to previous error
+
+error: Could not compile `wasm-game-of-life`.
+
+To learn more, run the command again with --verbose.
+
+Oct 07 22:11:51.570 ERRO Compilation of your program failed. stderr:
+
+   Compiling wasm-game-of-life v0.1.0 (file:///home/michele/learning/rust/wasm-game-of-life)
+error: expected one of `!` or `::`, found `(`
+   --> src/lib.rs:190:33
+    |
+190 |             js_sys::Math::random() < level
+    |                                 ^ expected one of `!` or `::` here
+
+error: aborting due to previous error
+
+error: Could not compile `wasm-game-of-life`.
+
+To learn more, run the command again with --verbose.
+
+Oct 07 22:12:37.632 ERRO Compilation of your program failed. stderr:
+
+   Compiling wasm-game-of-life v0.1.0 (file:///home/michele/learning/rust/wasm-game-of-life)
+error: expected one of `!` or `::`, found `(`
+   --> src/lib.rs:189:33
+    |
+189 |             js_sys::Math::random() < level
+    |                                 ^ expected one of `!` or `::` here
+
+error: aborting due to previous error
+
+error: Could not compile `wasm-game-of-life`.
+
+To learn more, run the command again with --verbose.
+
+Oct 07 22:13:56.180 ERRO Compilation of your program failed. stderr:
+
+   Compiling wasm-game-of-life v0.1.0 (file:///home/michele/learning/rust/wasm-game-of-life)
+error: expected one of `!`, `.`, `::`, `;`, `?`, `{`, `}`, or an operator, found `cfg_if`
+   --> src/lib.rs:190:5
+    |
+189 |     js_sys::Math::random() < level
+    |                                   - expected one of 8 possible tokens here
+190 |     cfg_if! {
+    |     ^^^^^^ unexpected token
+
+error[E0658]: attributes on expressions are experimental. (see issue #15701)
+   --> src/lib.rs:188:5
+    |
+188 |     #[cfg(target_arch = "wasm32")]
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: add #![feature(stmt_expr_attributes)] to the crate attributes to enable
+
+error: removing an expression is not supported in this position
+   --> src/lib.rs:188:5
+    |
+188 |     #[cfg(target_arch = "wasm32")]
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: aborting due to 3 previous errors
+
+For more information about this error, try `rustc --explain E0658`.
+error: Could not compile `wasm-game-of-life`.
+
+To learn more, run the command again with --verbose.
+
+Oct 07 22:14:06.347 ERRO Compilation of your program failed. stderr:
+
+   Compiling wasm-game-of-life v0.1.0 (file:///home/michele/learning/rust/wasm-game-of-life)
+error[E0658]: attributes on expressions are experimental. (see issue #15701)
+   --> src/lib.rs:188:5
+    |
+188 |     #[cfg(target_arch = "wasm32")]
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: add #![feature(stmt_expr_attributes)] to the crate attributes to enable
+
+error: removing an expression is not supported in this position
+   --> src/lib.rs:188:5
+    |
+188 |     #[cfg(target_arch = "wasm32")]
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: aborting due to 2 previous errors
+
+For more information about this error, try `rustc --explain E0658`.
+error: Could not compile `wasm-game-of-life`.
+
+To learn more, run the command again with --verbose.
+
+Oct 07 22:14:51.658 ERRO Compilation of your program failed. stderr:
+
+   Compiling wasm-game-of-life v0.1.0 (file:///home/michele/learning/rust/wasm-game-of-life)
+error[E0658]: attributes on expressions are experimental. (see issue #15701)
+   --> src/lib.rs:191:5
+    |
+191 |     #[not(cfg(target_arch = "wasm32"))] {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: add #![feature(stmt_expr_attributes)] to the crate attributes to enable
+
+error[E0658]: The attribute `not` is currently unknown to the compiler and may have meaning added to it in the future (see issue #29642)
+   --> src/lib.rs:191:7
+    |
+191 |     #[not(cfg(target_arch = "wasm32"))] {
+    |       ^^^
+    |
+    = help: add #![feature(custom_attribute)] to the crate attributes to enable
+
+error: aborting due to 2 previous errors
+
+For more information about this error, try `rustc --explain E0658`.
+error: Could not compile `wasm-game-of-life`.
+
+To learn more, run the command again with --verbose.
+

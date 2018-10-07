@@ -1,12 +1,16 @@
 extern crate cfg_if;
 extern crate wasm_bindgen;
+#[cfg(target_arch = "wasm32")]
 extern crate js_sys;
+#[cfg(not(target_arch = "wasm32"))]
+extern crate rand;
 #[macro_use]
 extern crate itertools;
 
 mod utils;
 
 use wasm_bindgen::prelude::*;
+use cfg_if::cfg_if;
 
 #[wasm_bindgen]
 #[repr(u8)]
@@ -102,7 +106,7 @@ impl Universe {
         iproduct!(0..self.width, 0..self.height).for_each(
             |(r, c)| {
                 self.set(r, c,
-                           if js_sys::Math::random() < 0.5 { Cell::Alive } else { Cell::Dead },
+                           if random(0.5) { Cell::Alive } else { Cell::Dead },
                 );
             }
         );
@@ -145,31 +149,49 @@ impl Universe {
     }
 
     pub fn tick(&mut self) {
-        let uu = self.clone();
-        iproduct!(0..self.height, 0..self.width)
-            .map(|(r, c)|
-                (r, c, uu.get(r, c), uu.live_neighbor_count(r, c))
-            )
-            .for_each(|(r, c, cell, count)|
-                {
-                    let next_cell = match (cell, count) {
-                        // Rule 1: Any live cell with fewer than two live neighbours
-                        // dies, as if caused by underpopulation.
-                        (Cell::Alive, x) if x < 2 => Cell::Dead,
-                        // Rule 2: Any live cell with two or three live neighbours
-                        // lives on to the next generation.
-                        (Cell::Alive, 2) | (Cell::Alive, 3) => Cell::Alive,
-                        // Rule 3: Any live cell with more than three live
-                        // neighbours dies, as if by overpopulation.
-                        (Cell::Alive, x) if x > 3 => Cell::Dead,
-                        // Rule 4: Any dead cell with exactly three live neighbours
-                        // becomes a live cell, as if by reproduction.
-                        (Cell::Dead, 3) => Cell::Alive,
-                        // All other cells remain in the same state.
-                        (otherwise, _) => otherwise,
-                    };
-                    self.set(r, c, next_cell)
-                });
+        let _timer = Timer::new("Universe::tick");
+        let prev_state = {
+            let _timer = Timer::new("Universe::tick::allocate");
+            self.clone()
+        };
+        {
+            let _timer = Timer::new("Universe::tick::next_generation");
+            iproduct!(0..self.height, 0..self.width)
+                .map(|(r, c)|
+                    (r, c, prev_state.get(r, c), prev_state.live_neighbor_count(r, c))
+                )
+                .for_each(|(r, c, cell, count)|
+                    {
+                        let next_cell = match (cell, count) {
+                            // Rule 1: Any live cell with fewer than two live neighbours
+                            // dies, as if caused by underpopulation.
+                            (Cell::Alive, x) if x < 2 => Cell::Dead,
+                            // Rule 2: Any live cell with two or three live neighbours
+                            // lives on to the next generation.
+                            (Cell::Alive, 2) | (Cell::Alive, 3) => Cell::Alive,
+                            // Rule 3: Any live cell with more than three live
+                            // neighbours dies, as if by overpopulation.
+                            (Cell::Alive, x) if x > 3 => Cell::Dead,
+                            // Rule 4: Any dead cell with exactly three live neighbours
+                            // becomes a live cell, as if by reproduction.
+                            (Cell::Dead, 3) => Cell::Alive,
+                            // All other cells remain in the same state.
+                            (otherwise, _) => otherwise,
+                        };
+                        self.set(r, c, next_cell)
+                    });
+
+        }
+        let _timer = Timer::new("Universe::tick::free_memory");
+    }
+}
+
+fn random(level: f64) -> bool {
+    #[cfg(target_arch = "wasm32")] {
+        js_sys::Math::random() < level
+    }
+    #[cfg(not(target_arch = "wasm32"))] {
+        rand::random::<f64>() < level
     }
 }
 
@@ -181,6 +203,26 @@ fn wrap(mut v: i32, size: u32) -> u32 {
     (v % size) as u32
 }
 
+pub struct Timer<'a> {
+    #[allow(dead_code)]
+    name: &'a str
+}
+
+impl<'a> Timer<'a> {
+    pub fn new(name: &'a str) -> Self {
+        time(name);
+        Self {name}
+    }
+}
+
+impl<'a> Drop for Timer<'a> {
+    fn drop(&mut self) {
+        timeEnd(self.name);
+    }
+}
+
+//Js interface
+#[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
 extern {
     #[wasm_bindgen(js_namespace = console)]
@@ -188,7 +230,32 @@ extern {
 
     #[wasm_bindgen(js_namespace = performance)]
     fn now() -> f64;
+
+    #[wasm_bindgen(js_namespace = console)]
+    fn time(name: &str);
+
+    #[wasm_bindgen(js_namespace = console)]
+    fn timeEnd(name: &str);
 }
+
+#[cfg(not(target_arch = "wasm32"))]
+mod mock {
+    pub fn log(msg: &str) {
+        println!("{}", msg)
+    }
+
+    pub fn now() -> f64 {
+        0.0
+    }
+
+    pub fn time(name: &str) {}
+
+    pub fn timeEnd(name: &str) {}
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+use mock::*;
+
 
 #[cfg(test)]
 mod test {
@@ -215,5 +282,3 @@ mod test {
         assert_eq!(8, u.live_neighbor_count(0, 0));
     }
 }
-
-
