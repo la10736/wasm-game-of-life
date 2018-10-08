@@ -64,11 +64,16 @@ impl Universe {
     }
 
     fn live_neighbor_count(&self, row: u32, column: u32) -> u8 {
-        iproduct!(-1..2, -1..2)
-            .filter(|&pair| pair != (0, 0))
-            .map(|(r, c)| (self.wrap_row((row as i32) + r), self.wrap_col((column as i32) + c)))
-            .filter(|&(r, c)| self.get(r, c) == Cell::Alive)
+        [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+            .iter()
+            .filter(|&(r, c)|
+                self.get_wrapped((row as i32) + r, (column as i32) + c) == Cell::Alive
+            )
             .count() as u8
+    }
+
+    fn get_wrapped(&self, r: i32, c: i32) -> Cell {
+        self.get(self.wrap_row(r), self.wrap_col(c))
     }
 
     fn wrap_row(&self, r: i32) -> u32 {
@@ -199,7 +204,10 @@ fn wrap(mut v: i32, size: u32) -> u32 {
     while v < 0 {
         v += size;
     }
-    (v % size) as u32
+    while v >= size {
+        v -= size;
+    }
+    v as u32
 }
 
 pub struct Timer<'a> {
