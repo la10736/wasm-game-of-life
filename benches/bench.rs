@@ -7,6 +7,6 @@ fn universe_tick(b: &mut test::Bencher) {
     let mut u = wasm_game_of_life::Universe::example();
 
     b.iter(|| {
-        u.tick();
+        for _ in 0..9 {u.tick()};
     });
 }

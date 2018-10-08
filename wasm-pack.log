@@ -429,3 +429,144 @@ error: Could not compile `wasm-game-of-life`.
 
 To learn more, run the command again with --verbose.
 
+Oct 08 21:46:30.102 ERRO Compilation of your program failed. stderr:
+
+   Compiling wasm-game-of-life v0.1.0 (file:///home/michele/learning/rust/wasm-game-of-life)
+error: unexpected close delimiter: `}`
+   --> src/lib.rs:214:1
+    |
+214 | }
+    | ^ unexpected close delimiter
+
+error: aborting due to previous error
+
+error: Could not compile `wasm-game-of-life`.
+
+To learn more, run the command again with --verbose.
+
+Oct 08 21:49:36.918 ERRO Compilation of your program failed. stderr:
+
+   Compiling wasm-game-of-life v0.1.0 (file:///home/michele/learning/rust/wasm-game-of-life)
+error[E0277]: the trait bound `[({integer}, {integer}); 8]: std::iter::Iterator` is not satisfied
+  --> src/lib.rs:68:23
+   |
+68 |         for (r, c) in [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)] {
+   |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `[({integer}, {integer}); 8]` is not an iterator; maybe try calling `.iter()` or a similar method
+   |
+   = help: the trait `std::iter::Iterator` is not implemented for `[({integer}, {integer}); 8]`
+   = note: required by `std::iter::IntoIterator::into_iter`
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0277`.
+error: Could not compile `wasm-game-of-life`.
+
+To learn more, run the command again with --verbose.
+
+Oct 08 22:11:08.690 INFO Running build command...
+Oct 08 22:11:08.690 INFO Checking rustc version...
+Oct 08 22:11:08.726 INFO rustc version is 30.
+Oct 08 22:11:08.727 INFO Checking crate configuration...
+Oct 08 22:11:08.727 INFO Crate is correctly configured.
+Oct 08 22:11:08.728 INFO Adding wasm-target...
+Oct 08 22:11:08.838 INFO Adding wasm-target was successful.
+Oct 08 22:11:08.838 INFO Building wasm...
+Oct 08 22:11:10.383 INFO wasm built at "/home/michele/learning/rust/wasm-game-of-life/target/wasm32-unknown-unknown/release".
+Oct 08 22:11:10.383 INFO Creating a pkg directory...
+Oct 08 22:11:10.383 INFO Created a pkg directory at "/home/michele/learning/rust/wasm-game-of-life".
+Oct 08 22:11:10.383 INFO Writing a package.json...
+Oct 08 22:11:10.383 INFO Wrote a package.json at "/home/michele/learning/rust/wasm-game-of-life/pkg/package.json".
+Oct 08 22:11:10.383 INFO Copying readme from crate...
+Oct 08 22:11:10.385 INFO Copied readme from crate to "/home/michele/learning/rust/wasm-game-of-life/pkg".
+Oct 08 22:11:10.385 INFO Identifying wasm-bindgen dependency...
+Oct 08 22:11:10.417 INFO Installing wasm-bindgen-cli...
+Oct 08 22:11:10.423 INFO Checking installed `wasm-bindgen` version == expected version: 0.2.23 == 0.2.23
+Oct 08 22:11:10.423 INFO Installing wasm-bindgen-cli was successful.
+Oct 08 22:11:10.423 INFO Getting the crate name from the manifest...
+Oct 08 22:11:10.423 INFO Got crate name "wasm-game-of-life" from the manifest at "/home/michele/learning/rust/wasm-game-of-life/Cargo.toml".
+Oct 08 22:11:10.424 INFO Building the wasm bindings...
+Oct 08 22:11:10.455 INFO wasm bindings were built at "/home/michele/learning/rust/wasm-game-of-life/pkg".
+Oct 08 22:11:10.455 INFO Done in 1 second.
+Oct 08 22:11:10.455 INFO Your wasm pkg is ready to publish at "/home/michele/learning/rust/wasm-game-of-life/pkg".
+Oct 08 22:12:10.288 INFO Running build command...
+Oct 08 22:12:10.288 INFO Checking rustc version...
+Oct 08 22:12:10.314 INFO rustc version is 30.
+Oct 08 22:12:10.315 INFO Checking crate configuration...
+Oct 08 22:12:10.323 INFO Crate is correctly configured.
+Oct 08 22:12:10.323 INFO Adding wasm-target...
+Oct 08 22:12:10.433 INFO Adding wasm-target was successful.
+Oct 08 22:12:10.433 INFO Building wasm...
+Oct 08 22:16:21.981 INFO wasm built at "/home/michele/learning/rust/wasm-game-of-life/target/wasm32-unknown-unknown/release".
+Oct 08 22:16:21.981 INFO Creating a pkg directory...
+Oct 08 22:16:21.981 INFO Created a pkg directory at "/home/michele/learning/rust/wasm-game-of-life".
+Oct 08 22:16:21.982 INFO Writing a package.json...
+Oct 08 22:16:21.983 INFO Wrote a package.json at "/home/michele/learning/rust/wasm-game-of-life/pkg/package.json".
+Oct 08 22:16:21.984 INFO Copying readme from crate...
+Oct 08 22:16:21.985 INFO Copied readme from crate to "/home/michele/learning/rust/wasm-game-of-life/pkg".
+Oct 08 22:16:21.985 INFO Identifying wasm-bindgen dependency...
+Oct 08 22:16:22.018 INFO Installing wasm-bindgen-cli...
+Oct 08 22:16:22.026 INFO Checking installed `wasm-bindgen` version == expected version: 0.2.23 == 0.2.23
+Oct 08 22:16:22.027 INFO Installing wasm-bindgen-cli was successful.
+Oct 08 22:16:22.027 INFO Getting the crate name from the manifest...
+Oct 08 22:16:22.027 INFO Got crate name "wasm-game-of-life" from the manifest at "/home/michele/learning/rust/wasm-game-of-life/Cargo.toml".
+Oct 08 22:16:22.027 INFO Building the wasm bindings...
+Oct 08 22:16:22.053 INFO wasm bindings were built at "/home/michele/learning/rust/wasm-game-of-life/pkg".
+Oct 08 22:16:22.053 INFO Done in 4 minutes.
+Oct 08 22:16:22.053 INFO Your wasm pkg is ready to publish at "/home/michele/learning/rust/wasm-game-of-life/pkg".
+Oct 08 22:49:43.916 ERRO Compilation of your program failed. stderr:
+
+   Compiling wasm-game-of-life v0.1.0 (file:///home/michele/learning/rust/wasm-game-of-life)
+error[E0308]: mismatched types
+  --> src/lib.rs:74:9
+   |
+66 |       fn live_neighbor_count(&self, row: u32, column: u32) -> u32 {
+   |                                                               --- expected `u32` because of return type
+...
+74 | /         [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+75 | |             .iter()
+76 | |             .filter(|&(r, c)|
+77 | |                 self.get_wrapped((row as i32) + r, (column as i32) + c) == Cell::Alive
+78 | |             )
+79 | |             .count() as u8
+   | |__________________________^ expected u32, found u8
+help: you can cast an `u8` to `u32`, which will zero-extend the source value
+   |
+74 |         ([(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+75 |             .iter()
+76 |             .filter(|&(r, c)|
+77 |                 self.get_wrapped((row as i32) + r, (column as i32) + c) == Cell::Alive
+78 |             )
+79 |             .count() as u8).into()
+   |
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0308`.
+error: Could not compile `wasm-game-of-life`.
+
+To learn more, run the command again with --verbose.
+
+Oct 08 22:49:57.739 ERRO Compilation of your program failed. stderr:
+
+   Compiling wasm-game-of-life v0.1.0 (file:///home/michele/learning/rust/wasm-game-of-life)
+error[E0308]: mismatched types
+  --> src/lib.rs:74:9
+   |
+66 |       fn live_neighbor_count(&self, row: u32, column: u32) -> u32 {
+   |                                                               --- expected `u32` because of return type
+...
+74 | /         [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+75 | |             .iter()
+76 | |             .filter(|&(r, c)|
+77 | |                 self.get_wrapped((row as i32) + r, (column as i32) + c) == Cell::Alive
+78 | |             )
+79 | |             .count()
+   | |____________________^ expected u32, found usize
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0308`.
+error: Could not compile `wasm-game-of-life`.
+
+To learn more, run the command again with --verbose.
+

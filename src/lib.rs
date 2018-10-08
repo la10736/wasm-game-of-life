@@ -63,13 +63,20 @@ impl Universe {
         }
     }
 
-    fn live_neighbor_count(&self, row: u32, column: u32) -> u8 {
+    fn live_neighbor_count(&self, row: u32, column: u32) -> u32 {
+//        let mut count = 0;
+//        for (r, c) in &[(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)] {
+//            if self.get_wrapped((row as i32) + r, (column as i32) + c) == Cell::Alive {
+//                count += 1;
+//            }
+//        }
+//        count
         [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
             .iter()
             .filter(|&(r, c)|
                 self.get_wrapped((row as i32) + r, (column as i32) + c) == Cell::Alive
             )
-            .count() as u8
+            .count() as u32
     }
 
     fn get_wrapped(&self, r: i32, c: i32) -> Cell {
@@ -160,33 +167,40 @@ impl Universe {
         };
         {
             let _timer = Timer::new("Universe::tick::next_generation");
+//            for r in 0..self.height {
+//                for c in 0..self.width {
+//                    self.set(r, c, prev_state.next_cell_state(r, c))
+//
+//                }
+//            }
             iproduct!(0..self.height, 0..self.width)
-                .map(|(r, c)|
-                    (r, c, prev_state.get(r, c), prev_state.live_neighbor_count(r, c))
-                )
-                .for_each(|(r, c, cell, count)|
+                .for_each(|(r, c)|
                     {
-                        let next_cell = match (cell, count) {
-                            // Rule 1: Any live cell with fewer than two live neighbours
-                            // dies, as if caused by underpopulation.
-                            (Cell::Alive, x) if x < 2 => Cell::Dead,
-                            // Rule 2: Any live cell with two or three live neighbours
-                            // lives on to the next generation.
-                            (Cell::Alive, 2) | (Cell::Alive, 3) => Cell::Alive,
-                            // Rule 3: Any live cell with more than three live
-                            // neighbours dies, as if by overpopulation.
-                            (Cell::Alive, x) if x > 3 => Cell::Dead,
-                            // Rule 4: Any dead cell with exactly three live neighbours
-                            // becomes a live cell, as if by reproduction.
-                            (Cell::Dead, 3) => Cell::Alive,
-                            // All other cells remain in the same state.
-                            (otherwise, _) => otherwise,
-                        };
-                        self.set(r, c, next_cell)
+                        self.set(r, c, prev_state.next_cell_state(r, c))
                     });
 
         }
         let _timer = Timer::new("Universe::tick::free_memory");
+    }
+
+    fn next_cell_state(&self, r: u32, c: u32) -> Cell {
+        let next_cell = match (self.get(r, c), self.live_neighbor_count(r, c)) {
+            // Rule 1: Any live cell with fewer than two live neighbours
+            // dies, as if caused by underpopulation.
+            (Cell::Alive, x) if x < 2 => Cell::Dead,
+            // Rule 2: Any live cell with two or three live neighbours
+            // lives on to the next generation.
+            (Cell::Alive, 2) | (Cell::Alive, 3) => Cell::Alive,
+            // Rule 3: Any live cell with more than three live
+            // neighbours dies, as if by overpopulation.
+            (Cell::Alive, x) if x > 3 => Cell::Dead,
+            // Rule 4: Any dead cell with exactly three live neighbours
+            // becomes a live cell, as if by reproduction.
+            (Cell::Dead, 3) => Cell::Alive,
+            // All other cells remain in the same state.
+            (otherwise, _) => otherwise,
+        };
+        next_cell
     }
 }
 

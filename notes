@@ -1,0 +1,18 @@
+
+0..9
+running 1 test
+test universe_tick ... bench:   5,596,268 ns/iter (+/- 225,158)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 1 measured; 0 filtered out
+
+Random 11 ticks -> 18 fps
+
+
+POST
+
+running 1 test
+test universe_tick ... bench:   1,875,192 ns/iter (+/- 190,164)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 1 measured; 0 filtered out
+
+Random 11 ticks -> 17 fps
