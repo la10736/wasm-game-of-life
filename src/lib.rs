@@ -10,7 +10,6 @@ extern crate itertools;
 mod utils;
 
 use wasm_bindgen::prelude::*;
-use cfg_if::cfg_if;
 
 #[wasm_bindgen]
 #[repr(u8)]
@@ -239,6 +238,9 @@ extern {
 }
 
 #[cfg(not(target_arch = "wasm32"))]
+#[allow(unused_variables)]
+#[allow(dead_code)]
+#[allow(non_snake_case)]
 mod mock {
     pub fn log(msg: &str) {
         println!("{}", msg)
